@@ -24,7 +24,7 @@ Groovy Version: 2.4.3 JVM: 1.6.0_65 Vendor: Apple Inc. OS: Mac OS X
 首先说明两点:  
 1）groovy自己是有一个简单GUI组件可以实现编码的，如果怕麻烦，可以直接使用，方法是在命令行里面执行 __groovyConsole__ 命令，你就可以看见下面的UI：
 
-![Groovy自带GUI](http://7xktd8.com1.z0.glb.clouddn.com/GroovyGUI.png)
+![Groovy自带GUI](../images/GroovyGUI.png)
 这个简单的编辑器基本可以满足联系的需要，上半部分是编码的，下半部分是输出，编写完成之后执行Cmd+R即可运行程序。另外字体也可以放大缩小，考虑的还是比较全面的。读者可以研究一下菜单栏，命令不多，可以很快的过一遍；  
 2）虽然平时使用Intellij比较多，但这里只讲一下如何在Eclipse中配置插件，原因是我对这个比较熟悉；
 

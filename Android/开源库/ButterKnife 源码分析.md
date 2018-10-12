@@ -6,7 +6,7 @@ categories: Android
 ---
 
 # 基本介绍
-<div align="center"><img src="http://7xktd8.com1.z0.glb.clouddn.com/logo_butterknife.png" width="188" alt="ButterKnife Logo"/></div>
+<div align="center"><img src="../../images/logo_butterknife.png" width="188" alt="ButterKnife Logo"/></div>
 
 __ButterKnife__ 是一个注解框架，项目地址: [ButterKnife](http://jakewharton.github.io/butterknife/) 。 简单使用🌰如下:
 

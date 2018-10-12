@@ -27,7 +27,7 @@ categories: Android
 
 下面是我自己绘制的一个更加详细的流程图：
 
-![Volley请求详细流程图](http://7xktd8.com1.z0.glb.clouddn.com/Volley流程图.png)
+![Volley请求详细流程图](../../images/Volley流程图.png)
 
 ### 1.2 横向切分
 针对上面三个部分的细致切分，主要体现在第二步，包括：
