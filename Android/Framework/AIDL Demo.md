@@ -1,5 +1,5 @@
 ---
-title: Java动态代理实现
+title: AIDL Demo
 date: 2016-06-14 11:33:59
 tags: [Android, AIDL]
 categories: Android
