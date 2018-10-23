@@ -51,7 +51,7 @@ API 文档通常是由 Javadoc 从代码注释生成，它所应该标注的应�
 
 前面的两段文字就是描述块，后面四行以`@`开头的就称为标记块。生成的 API 文档如下：
 
-<div align="center"><img src="http://7xktd8.com1.z0.glb.clouddn.com/API文档示例.png"  alt="API文档示例"/></div>
+<div align="center"><img src="../images/API文档示例.png"  alt="API文档示例"/></div>
 
 ### 基本规范
 
@@ -119,7 +119,7 @@ API 文档通常是由 Javadoc 从代码注释生成，它所应该标注的应�
 
 Tag，就是前面例子中看到的`@param`、`@return`、`@see`这样的标记，它是大小写铭感的，必须写在某一行的开头（前面可以有空格或者可选的星号），否则就会被当做普通文本处理。
 
-__Tag 分为两类，块 Tag (Block Tag)和行内 Tag(Inline Tag)。__前者只能出现在描述后面的 Tag 部分，形式是`@tag`；后者可以出现在描述块或者块 Tag 后面的描述中，形式是`{@tag}`。目前 Tag 包括：`@author`，`{@code}`，`{@docRoot}`，`@deprecated`，`@exception`，`{@inheritDoc}`，`{@link}`，`@{linkplain}`，`{@literal}`，`@param`，`@return`，`@see`，`serial`，`@serialData`，`@serialField`，`@since`，`@throws`，`{@value}`，`@version`。
+__Tag 分为两类，块 Tag (Block Tag)和行内 Tag(Inline Tag)。__ 前者只能出现在描述后面的 Tag 部分，形式是`@tag`；后者可以出现在描述块或者块 Tag 后面的描述中，形式是`{@tag}`。目前 Tag 包括：`@author`，`{@code}`，`{@docRoot}`，`@deprecated`，`@exception`，`{@inheritDoc}`，`{@link}`，`@{linkplain}`，`{@literal}`，`@param`，`@return`，`@see`，`serial`，`@serialData`，`@serialField`，`@since`，`@throws`，`{@value}`，`@version`。
 
 下面简单介绍下用法，详细可见 [JAVADOC TAGS](http://docs.oracle.com/javase/7/docs/technotes/tools/windows/javadoc.html#link)。
 
@@ -210,7 +210,7 @@ Use the <a href="Component.html#getComponentAt(int, int)">getComponentAt</a> met
 
 具体写法可以参见下面的表格：
 
-<div align="center"><img src="http://7xktd8.com1.z0.glb.clouddn.com/@see写法.png" height="360" alt="API文档示例"/></div>
+<div align="center"><img src="../images/@see写法.png" height="360" alt="API文档示例"/></div>
 
 #### @since since-text
 
@@ -256,4 +256,4 @@ public String evalScript(String script) {
 
 文章提到的两篇文档中还有很多注释相关的整理，尤其是关于生成文档的命令选项，如果真的需要生成 API 文档，可以仔细研究一下。这里整理的目的主要是为了日常开发所用，一般只限于代码注释而不用生成 API 文档，因此这里就不再继续研究了。
 
-希望这篇文章能够提高一下自己和读者写注释的规范性，让注释能更好的帮助别人理解我们的代码。
+希望这篇文章能够提高一下自己和读者写注释的规范性，让别人能更好的理解我们的代码。
