@@ -58,7 +58,7 @@ boring2
 Proxy detected the interesting method
 interesting bonobo
 ```
-它的使用非常简单，重点就在于InvocationHandler的实现。这里可以对方法的调用做出转发，很像APO？
+它的使用非常简单，重点就在于 InvocationHandler 的实现。这里可以对方法的调用做出转发，很像 APO？
 
 ## 实现
 ### 分析前提
@@ -97,11 +97,10 @@ private static Map proxyClasses = Collections.synchronizedMap(new WeakHashMap())
 // 关联的调用处理器引用
 protected InvocationHandler h;
 
-//代理类实例化构建参数
-private final static Class[] constructorParams =
-        { InvocationHandler.class };
+// 代理类实例化构建参数
+private final static Class[] constructorParams = { InvocationHandler.class };
 ```
-由变量可以猜测，代理的创建过程中是使用了很多的缓存的。
+具体作用看注释。
 
 ### 静态构造方法
 ```java
@@ -129,12 +128,12 @@ public static Object newProxyInstance(ClassLoader loader,
     } 
 }
 ```
-这个方法很简单，主要是调用getProxyClass方法获取一个cl，然后通过反射创建出代理类的实例。很明显，核心在于getProxyClass到底做了什么？
+这个方法很简单，主要是调用`getProxyClass`方法获取一个 cl，然后通过反射创建出代理类的实例。很明显，核心在于getProxyClass到底做了什么？
 
-### getProxyClass方法
+### `getProxyClass`方法
 这个方法比较长，分为四个主体部分:
 
-【1】对这组接口进行一定程度的安全检查，包括检查接口类对象是否对类装载器可见并且与类装载器所能识别的接口类对象是完全相同的，还会检查确保是 interface 类型而不是 class 类型。这个步骤通过一个循环来完成，检查通过后将会得到一个包含所有接口名称的字符串数组，记为 String[] interfaceNames。总体上这部分实现比较直观，所以略去大部分代码，仅保留留如何判断某类或接口是否对特定类装载器可见的相关代码。
+【1】对这组接口进行一定程度的安全检查，包括检查接口类对象是否对类装载器可见并且与类装载器所能识别的接口类对象是完全相同的，还会检查确保是 interface 类型而不是 class 类型。这个步骤通过一个循环来完成，检查通过后将会得到一个包含所有接口名称的字符串数组，记为 String[] interfaceNames。总体上这部分实现比较直观，所以略去大部分代码，仅保留如何判断某类或接口是否对特定类装载器可见的相关代码。
 
 ```java
 try { 
@@ -275,7 +274,7 @@ final byte[] classFile = gen.generateClassFile();
 ```
 继续追踪generateClassFile方法。
 
-### generateClassFile方法
+### `generateClassFile` 方法
 从方法名字可以猜出，这个方法用于生成一个Class对象。这个方法也非常长，分为3步。
 
 【1】收集创建Class对象的所有方法，并创建对应的ProxyMethod对象，以便于后面生成代理代码:
