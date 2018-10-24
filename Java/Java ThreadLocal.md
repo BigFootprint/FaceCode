@@ -226,4 +226,4 @@ ThreadLocal 的实现很容易让人觉得不会，比如 ThreadLocalMap 的 Ent
 等到 Thread 死亡之后才能把资源副本全部释放掉。
 
 ## 总结
-日常开发中并不常用到这个类，但是它提供了解决资源安全的一种方案，便利且优雅，对于其使用，Android 开发者可以去研习一下 [Handler的实现](../Android/Framework/Android Handler.md)。
+日常开发中并不常用到这个类，但是它提供了解决资源安全的一种方案，便利且优雅，对于其使用，Android 开发者可以去研习一下 [Handler的实现](../Android/Framework/Android%20Handler.md)。
