@@ -52,7 +52,7 @@ public void println(String x) {
 
 以上方案可以说有一点投机取巧，它有局限性的。
 
-## Logger变化怎么办？
+## Logger 变化怎么办？
 
 如果某天 Android 系统不再调用这段 Logger，或者在别的地方也打印 Logger，很容易看到 BlockCanary 的方案就会失效。除此之外，读者可能会忽略前面展示的 Looper 的那段代码的一个小注释：
 
@@ -60,13 +60,13 @@ public void println(String x) {
 // This must be in a local variable, in case a UI event sets the logger
 ```
 
-UI 时间可能也会设置这个 logger，因此依赖 Logger 并不靠谱，解决方案是使用 [SafeLooper](https://github.com/mmin18/SafeLooper)。
+UI 时间可能也会设置这个 logger，因此依赖 Logger 并不靠谱， [SafeLooper](https://github.com/mmin18/SafeLooper) 提供了另外一种思路。
 
 SafeLooper 通过在主线程队列中塞入一个可以托管主线程后续消息的阻塞消息，可以在应用内部执行：
 
 `h.dispatchMessage(msg);`
 
-这段代码，这样就可以完全不依赖Logger来统计时间。
+这段代码，这样就可以完全不依赖 Logger 来统计时间。
 
 ## 如果卡顿时间非常非常长怎么办？
 
@@ -368,7 +368,7 @@ public void onCreate() {
 }
 ```
 
-也就是说，这个方法会先于四大组件运行。综上可以得出结论：__在Application的构造函数中，开发者可以获得App发出的第一个主线程消息并执行相关代码__。
+也就是说，这个方法会先于四大组件运行。综上可以得出结论：__在 Application 的构造函数中，开发者可以获得App 发出的第一个主线程消息并执行相关代码__。
 
 根据前面的卡顿原理分析，这种情况下是无法监控到这个消息本身的，也就是说通过 Logger 的打印不能监控到 Application 的`onCreate()`方法。
 
