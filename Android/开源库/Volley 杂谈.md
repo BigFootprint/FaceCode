@@ -5,7 +5,7 @@ tags: [源码]
 categories: Android
 ---
 
-关于Volley框架的基本介绍，可以看下面几篇文章：
+关于 Volley 框架的基本介绍，可以看下面几篇文章：
 
 1. [Android 网络通信框架Volley简介(Google IO 2013)](http://blog.csdn.net/t12x3456/article/details/9221611)
 2. [Volley 源码解析](http://www.codekk.com/open-source-project-analysis/detail/Android/grumoon/Volley%20%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90)

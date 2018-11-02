@@ -63,7 +63,7 @@ public void bind(ExampleActivity activity) {
 另外也可以关注一下这个项目: [android-apt](https://bitbucket.org/hvisser/android-apt)。
 
 # 项目结构
-如下是ButterKnife的项目结构:
+如下是 ButterKnife 的项目结构:
 <div align="center"><img src="../../images/ButterKnife项目.png" width="250" alt="ButterKnife项目"/></div>
 
 ButterKnife 项目分为四个 Module: Module butterknife-annotations 中定义的是 ButterKnife 所支持的注解，butterknife-compiler 中主要是编译时注解 Processor。butterknife-sample 则是一个使用例子。
@@ -124,9 +124,9 @@ public @interface ListenerMethod {
 	String defaultReturn() default "null";
 }
 ```
-这个注解主要是定义一个方法的签名(方法名字、方法的参数、方法的返回类型)以及默认返回值。
+这个注解主要是定义一个方法的签名（方法名字、方法的参数、方法的返回类型）以及默认返回值。
 
-再来看`ListenerClass`:
+再来看`ListenerClass`：
 
 ```java
 @Retention(RUNTIME) @Target(ANNOTATION_TYPE)
@@ -185,11 +185,11 @@ public @interface OnCheckedChanged {
 }
 ```
 首先，该注解同样是编译时注解，并且是用于修饰一个方法的。
-其次，使用“元注解”修饰该注解：该注解是用于为 ComPoundButton 通过`setOnCheckedChangeListener`添加`OnCheckedChangeListener`监听的，该监听有一个需要实现的方法`onCheckedChanged `，该方法传入一个 CompoundButton 对象和布尔值作为参数。
+其次，使用“元注解”修饰该注解：该注解是用于为 CompoundButton 通过`setOnCheckedChangeListener`添加`OnCheckedChangeListener`监听的，该监听有一个需要实现的方法`onCheckedChanged `，该方法传入一个 CompoundButton 对象和布尔值作为参数。
 
 最后我们关注一下这个注解本身：它只需要返回设置一组 id 即可，默认返回的是`View.NO_ID`。
 
-这样就完成了一个事件注解的定义。这样看上去很抽象，我们看一个官网对`OnClick`注解的使用例子就清楚了:
+这样就完成了一个事件注解的定义。这样看上去很抽象，我们看一个官网对`OnClick`注解的使用例子就清楚了：
 
 ```java
 @OnClick({ R.id.door1, R.id.door2, R.id.door3 })
@@ -220,7 +220,7 @@ viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 	}
 });
 ```
-如果像`@onClick`那样绑定，我怎么知道绑定的是哪个方法呢？也就是说，是在哪个回调里面执行这个方法呢？这个是通过`callback`来实现的，我们看一下`@OnPageChange`:
+如果像`@onClick`那样绑定，我怎么知道绑定的是哪个方法呢？也就是说，是在哪个回调里面执行这个方法呢？这个是通过`callback`来实现的，我们看一下`@OnPageChange`：
 
 ```java
 @Target(METHOD)
@@ -266,14 +266,15 @@ public @interface OnPageChange {
   	}
 }
 ```
-callback 其实是个枚举值，是一组 ListenerMethod，映射到监听类的若干个方法，`@OnPageChange`注解就定义了三组，callback 默认是`Callback.PAGE_SELECTED`，这个值代表的方法是`onPageSelected`，即如果按照下面的用法:
+callback 其实是个枚举值，是一组 ListenerMethod，映射到监听类的若干个方法，`@OnPageChange`注解就定义了三组，callback 默认是`Callback.PAGE_SELECTED`，这个值代表的方法是`onPageSelected`，即如果按照下面的用法：
 
 ```java
-@OnPageChange(R.id.example_pager) void onPageSelected(int position) {
+@OnPageChange(R.id.example_pager) 
+void onPageSelected(int position) {
 	Toast.makeText(this, "Selected " + position + "!", Toast.LENGTH_SHORT).show();
 }
 ```
-那么就是当`onPageSelected`回调时，该方法会被调用。如果我想绑定到另外一个回调接口里面去，应该怎么办呢？可以如下使用:
+那么就是当`onPageSelected`回调时，该方法会被调用。如果我想绑定到另外一个回调接口里面去，应该怎么办呢？可以如下使用：
 
 ```java
 @OnPageChange(value = R.id.example_pager, callback = PAGE_SCROLL_STATE_CHANGED)
@@ -294,7 +295,8 @@ void onPageStateChanged(int state) {
  * {@literal @}Bind(R.id.title) TextView title;
  * </code></pre>
  */
-@Retention(CLASS) @Target(FIELD)
+@Retention(CLASS) 
+@Target(FIELD)
 public @interface Bind {
 	/** View ID to which the field will be bound. */
 	@IdRes int[] value();
@@ -306,7 +308,7 @@ public @interface Bind {
 1. __Unbinder__ 这个注解是为了给类生成一个Unbinder实例，这样可以将之前`bind`的变量全部解绑，后面有例子；
 2. __Optional__ 可选项，有时候有些 View、资源找不到，所以有些注入必须可选，否则就会 Crash；
 
-# 注解解析大致过程
+# 注解解析
 定义注解只是注解框架的一部分，代表着注解框架所支持的功能，解析注解是注解框架的另一个核心部分。下面我们来看看 ButterKnife 是如何实现编译时注解的。我们就从使用的例子上切入开始分析整个注解的运作过程。
 
 ## 运行时解析
@@ -315,7 +317,7 @@ public @interface Bind {
 ```java
 ButterKnife.bind(this);
 ```
-在任何需要使用ButterKnife的类中，这行代码都需要调用。我们看看这个方法做了什么：
+在任何需要使用 ButterKnife 的类中，这行代码都需要调用。我们看看这个方法做了什么：
 
 ```java
 public static void bind(@NonNull Activity target) {
@@ -367,7 +369,7 @@ private static ViewBinder<Object> findViewBinderForClass(Class<?> cls) throws Il
     return viewBinder;
 }
 ```
-这里其实是为一个类创建一个 ViewBinder<Object> 对象，并通过 BINDERS 做出缓存。这里注意一点: 当检测到是 android 或者 java 框架库中的类，则立即返回，否则就会默认去读取类中的`clsName + "$$ViewBinder"`类，并由这个类创建出 ViewBinder<Object> 对象（可以猜测出这个类就是 ViewBinder<Object> 类型的）。
+这里其实是为一个类创建一个 `ViewBinder<Object>` 对象，并通过 BINDERS 做出缓存。这里注意一点: 当检测到是 android 或者 java 框架库中的类，则立即返回，否则就会默认去读取类中的`clsName + "$$ViewBinder"`类，并由这个类创建出 `ViewBinder<Object>` 对象（可以猜测出这个类就是 `ViewBinder<Object>` 类型的）。如果找不到，则递归为其父类调用 `findViewBinderForClass` 方法。
 
 可是我们在使用 ButterKnife 类的时候，并没有创建这个奇怪的类，那么这个类来自哪里呢？这个下一节再解释，我们继续往下分析，在`findViewBinderForClass`之后，调用的就是下面的方法:
 
@@ -379,7 +381,7 @@ ViewBinder 只是一个接口，框架里面没有相关实现，根据前面的
 所以，我们去找`clsName + "$$ViewBinder"`类吧。
 
 ## 编译时注解——代码生成
-研究编译时注解，我们需要找到 Processor 类，ButterKnife 类的 Processor 类叫做`ButterKnifeProcessor`，它的`process`方法如下:
+研究编译时注解，我们需要找到 Processor 类，ButterKnife 的 Processor 类叫做`ButterKnifeProcessor`，它的`process`方法如下:
 
 ```java
 @Override public boolean process(Set<? extends TypeElement> elements, RoundEnvironment env) {
@@ -549,7 +551,7 @@ static void bind(@NonNull Object target, @NonNull Object source, @NonNull Finder
 View view = (View)finder.findRequiredView(source, 2130968576, "field \'title\'");
 target.title = (TextView)finder.castView(view, 2130968576, "field \'title\'");
 ```
-这里就通过 finder 的`findRequiredView`和`castView`两个方法来为 target 的 title 属性来赋值了。这里其实略有多余，不需要再添加`(TextView)`强转，看一下`castView`方法的实现就好了:
+这里就通过 finder 的`findRequiredView`和`castView`两个方法来为 target 的 title 属性来赋值了，最后一个字符串用于 Log 输出。这里其实略有多余，不需要再添加`(TextView)`强转，看一下`castView`方法的实现就好了:
 
 ```java
 public <T> T castView(View view, int id, String who) {
@@ -580,7 +582,14 @@ __为注解类生成一个对应的 ViewBinder 类，自动生成`findViewById`�
 ```java
 @Unbinder ButterKnife.Unbinder unbinder;
 ```
-在`unbinder()`方法里面，我们可以看到把注入的内容全部删除了，这也就是`@Unbinder`注解的使用方法。
+在`unbinder()`方法里面，我们可以看到把注入的内容全部删除了，这也就是`@Unbinder`注解的使用方法：
+
+```java
+@Override public void onDestroyView() {
+    super.onDestroyView();
+    unbinder.unbind();
+}
+```
 
 好了，到了这里，我们大致能知道 ButterKnife 是怎么玩的了，但是具体如何生成类这一块还不是很清楚。__下一节我们来重点分析：ButterKnife 是如何生成一个类的。__
 
@@ -591,8 +600,7 @@ __为注解类生成一个对应的 ViewBinder 类，自动生成`findViewById`�
 我们来看一个`parseResourceInt `方法，这是处理所有的 Int 资源的类:
 
 ```java
-private void parseResourceInt(Element element, Map<TypeElement, BindingClass> targetClassMap,
-                                  Set<String> erasedTargetNames) {
+private void parseResourceInt(Element element, Map<TypeElement, BindingClass> targetClassMap, Set<String> erasedTargetNames) {
 	boolean hasError = false;
 	// A
 	TypeElement enclosingElement = (TypeElement) element.getEnclosingElement();
@@ -645,7 +653,7 @@ private BindingClass getOrCreateTargetClass(Map<TypeElement, BindingClass> targe
 	return bindingClass;
 }
 ```
-代码很清楚：这里会往 targetClassMap里面存储一个 Entry，Key 为 enclosingElement（即外部类），Value 为 BindingClass。BindingClass 初始化记录了三样东西: 原先的注解类类名、原先的注解类所在包名和要生成的注解类类名（`XXX$$ViewBinder`）。
+代码很清楚：这里会往`targetClassMap`里面存储一个 Entry，Key 为`enclosingElement`（即外部类），Value 为 BindingClass。BindingClass 初始化记录了三样东西: 原先的注解类类名、原先的注解类所在包名和要生成的注解类类名（`XXX$$ViewBinder`）。
 
 我们继续看 B 处，在获取到这个 BindingClass 之后，就执行如下代码:
 
@@ -653,9 +661,9 @@ private BindingClass getOrCreateTargetClass(Map<TypeElement, BindingClass> targe
 FieldResourceBinding binding = new FieldResourceBinding(id, name, "getInteger", false);
 bindingClass.addResource(binding);
 ```
-这个代码生成一个 FieldResourceBinding 对象然后添加到 BindingClass 中。
+这个代码生成一个 FieldResourceBinding 对象然后添加到 BindingClass 中，当遍历完所有的注解元素之后，就知道一个 BindingClass 应该如何生成了。
 
-由此我们可以看到整个解析过程: __遍历所有的注解元素，并通过`getEnclosingElement()`获取声明这些元素的类，所有需要创建的类信息都维护在`targetClassMap`Map 数据结构中，Key 为注解使用类，Value 为BindingClass —— 后续将根据这个 BindingClass 生成代码。所有的注解元素都将经过解析存储到 BindingClass 中（类似 FieldResourceBinding 这样的属性），最终解析完成，所有需要生成的类都可以通过`targetClassMap`索引到__。
+由此我们可以看到整个解析过程： __遍历所有的注解元素，并通过`getEnclosingElement()`获取声明这些元素的类，所有需要创建的类信息都维护在`targetClassMap`Map 数据结构中，Key 为注解使用类，Value 为BindingClass —— 后续将根据这个 BindingClass 生成代码。所有的注解元素都将经过解析存储到 BindingClass 中（类似 FieldResourceBinding 这样的属性），最终解析完成，所有需要生成的类都可以通过`targetClassMap`索引到__。
 
 ## 写入过程
 写入过程是这样的:
