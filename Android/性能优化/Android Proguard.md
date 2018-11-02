@@ -11,17 +11,17 @@ __Proguard__ 主要提供以下功能：
 1. 创建更加紧凑的代码，让最终的代码更加小巧，可以更快的在网络上传输、加载，运行时可以消耗更小的内存；
 2. 混淆代码，使得程序逆向工程起来更加困难；
 3. 列出无用的代码，以便于可以移除它们；
-4. 重新定位以及校验 Java 6 以及以上版本的 class 文件：添加预校验信息到class文件中去，减轻 ClassLoader 的校验负担——详细解释可见[What is preverification?](http://proguard.sourceforge.net/FAQ.html#preverification)；
+4. 重新定位以及校验  Java 6 以及以上版本的 class 文件：添加预校验信息到 class 文件中去，减轻 ClassLoader 的校验负担——详细解释可见[What is preverification?](http://proguard.sourceforge.net/FAQ.html#preverification)；
 
 <!--more-->__Proguard__ 执行起来的速度非常快，效果显著，并且在 Ant、Gradle 等工具上已有插件实现。通过简单的模板化的配置加上简单的命令行选项，通常就足够对我们的代码做出出色的优化。
 
 >1. 具体的优化结果可以查看[这里](http://proguard.sourceforge.net/results.html)；
->2. 通过删除无用的代码(包括优化库文件)以及将变量名类名简化，可以大幅度减小包的体积；
->3. Proguard 专门为 Android 定制了一个优化和混淆版本: __DexGuard__。它专注于 App 的保护，另外提供诸如资源混淆、字符串加密、类加密、dex切分等功能。它直接创建 Dalvik 字节码。
+>2. 通过删除无用的代码（包括优化库文件）以及将变量名类名简化，可以大幅度减小包的体积；
+>3. Proguard 专门为 Android 定制了一个优化和混淆版本: __DexGuard__。它专注于 App 的保护，另外提供诸如资源混淆、字符串加密、类加密、dex 切分等功能。它直接创建 Dalvik 字节码。
 
-__Proguard__对代码的处理过程如下:
+__Proguard__ 对代码的处理过程如下:
 
-![Proguard优化过程](http://7xktd8.com1.z0.glb.clouddn.com/Proguard优化过程.png)
+![Proguard优化过程](../../images/Proguard优化过程.png)
 如图所示，__Proguard__ 读取 Input jars，经过一系列处理，最终得到一个 Output jars。优化过程是可以多次进行的。
 
 Proguard 要求指明 Input jars 的 Library jars —— 它们是你用来编译代码的库文件。库文件始终保持不变。
@@ -35,9 +35,9 @@ Proguard 要求指明 Input jars 的 Library jars —— 它们是你用来编�
 4. 预验证阶段是唯一一个不需要知道 entry points 的阶段；
 
 ### 反射
-自动处理代码在面对反射和自省时都会出现一些问题。在使用__Proguard__ 的时候，那些会被动态调用（即通过名字调用）的类和变量都应该被标记为 entry points。举个🌰 ：`Class.forName()`可能会指向任何的运行时的类，不太可能知道哪些类应该保持原来的名字以供这个方法调用（类名可能来源于任何地方）。因此开发者就必须在配置文件中通过`-keep`指定这个类。
+自动处理代码在面对反射和自省时都会出现一些问题。在使用 __Proguard__ 的时候，那些会被动态调用（即通过名字调用）的类和变量都应该被标记为 entry points。举个🌰 ：`Class.forName()`可能会指向任何的运行时的类，不太可能知道哪些类应该保持原来的名字以供这个方法调用（类名可能来源于任何地方）。因此开发者就必须在配置文件中通过`-keep`指定这个类。
 
-但是，__Proguard__会自动探测并处理以下情况：
+但是，__Proguard__ 会自动探测并处理以下情况：
 
 ```java
 //以下类名或者变量名都是通过字符串写死，而不是一个随时可以改变的变量
@@ -55,19 +55,19 @@ AtomicIntegerFieldUpdater.newUpdater(SomeClass.class, "someField")
 AtomicLongFieldUpdater.newUpdater(SomeClass.class, "someField")
 AtomicReferenceFieldUpdater.newUpdater(SomeClass.class, SomeType.class, "someField")
 ```
-类名或者变量的名字当然可能不同，但是这种构建模式__Proguard__是可以识别的，因此通过以上方式引用的类以及变量在压缩阶段会被保留，而String参数(指的是这些方法的参数)会在混淆阶段被替换。
->即__Proguard__会识别一些模式下对类和变量的引用，并机智的判断出哪些类和变量需要保留或者替换。
+类名或者变量的名字当然可能不同，但是这种构建模式 __Proguard__ 是可以识别的，因此通过以上方式引用的类以及变量在压缩阶段会被保留，而 String 参数（指的是这些方法的参数）会在混淆阶段被替换。
+>即 __Proguard__ 会识别一些模式下对类和变量的引用，并机智的判断出哪些类和变量需要保留或者替换。
 
-另外，__Proguard__会对保留哪些类是有必要的给出意见。举个🌰：__Proguard__会注意到如下的构建过程:`(SomeClass)Class.forName(variable).newInstance()`，这有可能意味着`SomeClass`这个类/接口以及它的实现都应该被保留（注意，这里并不属于前面说到的__Proguard__可以自动识别的模式）。
+另外，__Proguard__ 会对保留哪些类是有必要的给出意见。举个🌰：__Proguard__ 会注意到如下的构建过程:`(SomeClass)Class.forName(variable).newInstance()`，这有可能意味着`SomeClass`这个类/接口以及它的实现都应该被保留（注意，这里并不属于前面说到的 __Proguard__ 可以自动识别的模式）。
 >带有反射的代码还是要多加小心。
 
 ## 使用
-使用__Proguard__通常需要一个配置文件，针对以上每一个步骤，__Proguard__都提供了丰富的配置项，具体的配置选项[这里](http://proguard.sourceforge.net/manual/usage.html)可以查询，同时也有很多[例子](http://proguard.sourceforge.net/manual/examples.html)可以参考。另外__Proguard__还有一个GUI组件可以使用，[这里](http://proguard.sourceforge.net/manual/gui.html)可查看详细。
+使用 __Proguard__ 通常需要一个配置文件，针对以上每一个步骤，__Proguard__ 都提供了丰富的配置项，具体的配置选项[这里](http://proguard.sourceforge.net/manual/usage.html)可以查询，同时也有很多[例子](http://proguard.sourceforge.net/manual/examples.html)可以参考。另外 __Proguard__ 还有一个 GUI 组件可以使用，[这里](http://proguard.sourceforge.net/manual/gui.html)可查看详细。
 
 遇到问题可以在[官网的问题列表](http://proguard.sourceforge.net/manual/troubleshooting.html)里面搜索一下。
 
 #### 关于keep
-keep选项，总共有以下几种:
+keep 选项，总共有以下几种:
 
 | Keep                                     | From being removed or renamed | From being renamed          |
 | ---------------------------------------- | ----------------------------- | --------------------------- |
@@ -77,8 +77,8 @@ keep选项，总共有以下几种:
 
 如果不确认使用哪一个命令，可以使用`-keep`：这会保证指定的类以及类成员不会在压缩阶段被移除掉，在混淆阶段不会被重命名。
 >【注意！！】  
->1. 如果指定了一个类而没有指定keep它的类成员，那么__Proguard__仅仅会保留类以及它的无参构造方法作为entry points，它仍然可能会移除、优化或者混淆它的类成员；
->2. 如果指定了一个方法，那么__Proguard__只会保留方法为entry points，它的代码仍然可能被优化或者修改；
+>1. 如果指定了一个类而没有指定 keep 它的类成员，那么 __Proguard__ 仅仅会保留类以及它的无参构造方法作为 entry points，它仍然可能会移除、优化或者混淆它的类成员；
+>2. 如果指定了一个方法，那么 __Proguard__ 只会保留方法为 entry points，它的代码仍然可能被优化或者修改；
 
 #### Class Specifications
 `keep`后面肯定跟的是一个类或者类成员的描述符，从而表达`keep`应该应用在哪些地方。这个描述符是有规范的（或者称为模板），即Class Specifications。
@@ -124,7 +124,7 @@ keep选项，总共有以下几种:
 
 `@`描述符用于限定哪些使用特定的注解描述的类/类成员，`annotationtype`的描述和类名一致。
 
-变量和方法的描述和Java中的很像，除了方法的参数列表不包括参数名（类似于Java Doc中的表述），描述符中可以包含以下通配符：
+变量和方法的描述和 Java 中的很像，除了方法的参数列表不包括参数名（类似于Java Doc中的表述），描述符中可以包含以下通配符：
 
 1. __`<init>`__ 匹配任何一个构造函数；
 2. __`<fields>`__ 匹配任何一个变量；
@@ -151,7 +151,7 @@ Proguard甚至支持只有编译器才可以设置的控制符：`synthetic`，`
 >【注】以上翻译自[官网Usage](http://proguard.sourceforge.net/manual/usage.html)。如有错误，欢迎指出。
 
 ## Android
-在Android上，可以使用如下方式启用__Proguard__:
+在 Android 上，可以使用如下方式启用 __Proguard__:
 
 ```java
 android {
@@ -168,13 +168,13 @@ android {
 ```
 通过`minifyEnabled`的设置，可以对代码进行压缩优化；通过`shrinkResources `的设置，可以对代码进行资源优化；`proguardFiles`设置则用于提供压缩规则：
 
-1. `getDefaultProguardFile(‘proguard-android.txt')`方法会从Android SDK下的`tools/proguard/`目录读取__Proguard__的默认配置，在这个目录下面还有一个文件`proguard-android-optimize.txt`，它不仅包含相同的规则，而且会在字节码层级对APK进行分析，进一步优化APK文件，可以尝试；
+1. `getDefaultProguardFile(‘proguard-android.txt')`方法会从 Android SDK 下的`tools/proguard/`目录读取 __Proguard__ 的默认配置，在这个目录下面还有一个文件`proguard-android-optimize.txt`，它不仅包含相同的规则，而且会在字节码层级对 APK 进行分析，进一步优化 APK 文件，可以尝试；
 2. `proguard-rules.pro`文件是开发者自定义规则的地方，该文件默认与`build.gradle`文件同级；
 
 资源优化在代码压缩之后，因为只有移除不需要的代码之后才可以判断哪些资源无用。
->目前资源优化对于`values/`文件夹下面的资源不做移除，因为AAPT（Android Asset Packaging Tool）不允许。
+>目前资源优化对于`values/`文件夹下面的资源不做移除，因为 AAPT（Android Asset Packaging Tool）不允许。
 
-以下这种方式可以为某种特殊的build variant添加新的混淆规则：
+以下这种方式可以为某种特殊的 build variant 添加新的混淆规则：
 
 ```java
 android {
@@ -197,21 +197,21 @@ android {
 ```
 >Build Type  + Product Flavor = Build Variant
 >
->注意，这里在flavor2中设置的配置文件与buildTypes中的是追加关系，不是替代关系。
+>注意，这里在 flavor2 中设置的配置文件与 buildTypes 中的是追加关系，不是替代关系。
 
 ### 输出文件
 混淆后，会在`<module-name>/build/outputs/mapping/release/`目录下输出下面的文件：
 
-1. __dump.txt__ 描述apk文件中所有类文件间的内部结构；
+1. __dump.txt__ 描述 apk 文件中所有类文件间的内部结构；
 2. __mapping.txt__ 提供了原始的类，方法，和字段名与混淆后代码之间的映射；
 3. __seeds.txt__ 列出了未被混淆的类和成员；
-4. __usage.txt__ 列出了从apk中删除的代码；
+4. __usage.txt__ 列出了从 apk 中删除的代码；
 
 ### 定义代码保留
-某些情况下，使用默认的__Proguard__配置文件`proguard-android.txt`就足够了，__Proguard__仅仅会移除所有的未使用代码，但是有些情况__Proguard__很难判断，可能会移除一些不该被移除的代码，比如:
+某些情况下，使用默认的 __Proguard__ 配置文件`proguard-android.txt`就足够了，__Proguard__ 仅仅会移除所有的未使用代码，但是有些情况 __Proguard__ 很难判断，可能会移除一些不该被移除的代码，比如:
 
 1. 一个仅仅在`AndroidManifest.xml`文件中使用的类；
-2. 从JNI调用的方法；
+2. 从 JNI 调用的方法；
 3. 运行时操作的代码（比如反射和自省）；
 
 这部分代码需要特别注意，可以使用以上提到的输出文件辅助排查。可以使用一下配置语句进行代码保留:
@@ -221,9 +221,9 @@ android {
 ```
 还有一种办法就是使用`@Keep`注解，在类上使用这个注解，整个类都会保持原样，在方法/变量上使用该注解，则被注解的方法/变量以及它们的所在类都会保持原封不动，不过这个使用这个注解需要添加`Annotations Support Library`依赖。
 
-关于资源的优化，[官网](http://developer.android.com/intl/zh-cn/tools/help/proguard.html)上有比较详细的描述，比较复杂，这里不整理了。同代码一样，也可以对资源进行保留，但是对于重复的资源、多语言资源、通过Id引用的资源都有可选的配置。
+关于资源的优化，[官网](http://developer.android.com/intl/zh-cn/tools/help/proguard.html)上有比较详细的描述，比较复杂，这里不整理了。同代码一样，也可以对资源进行保留，但是对于重复的资源、多语言资源、通过 id 引用的资源都有可选的配置。
 
-下面给出一个配置例子:
+下面给出一个配置例子：
 
 ```java
 -injars      bin/classes
@@ -277,28 +277,28 @@ android {
 ```
 
 ### 反混淆
-对于打印出的Crash Log等信息，因为被混淆的原因，导致这些信息阅读起来非常困难。因此我们需要一个工具__翻译__一下这些信息，可以使用如下命令进行:
+对于打印出的 Crash Log 等信息，因为被混淆的原因，导致这些信息阅读起来非常困难。因此我们需要一个工具 __翻译__ 一下这些信息，可以使用如下命令进行:
 
 ```java
 retrace.bat|retrace.sh [-verbose] mapping.txt [<stacktrace_file>]
 ```
-`retrace`是一个工具，位于`<sdk-root>/tools/proguard/`目录下面(在Windows上是`retrace.bat`，在Mac/Linux上是`retrace.sh`。)。
+`retrace`是一个工具，位于`<sdk-root>/tools/proguard/`目录下面（在 Windows 上是`retrace.bat`，在Mac/Linux上是`retrace.sh`）。
 
-[官网](http://proguard.sourceforge.net/)也有相关的文档，点击Retrace Manual下面的三个Tab就可以看到介绍、使用方式以及例子。
+[官网](http://proguard.sourceforge.net/)也有相关的文档，点击 Retrace Manual 下面的三个 Tab 就可以看到介绍、使用方式以及例子。
 
->Google Play自动在支持反混淆，可见[帮助中心](https://support.google.com/googleplay/android-developer/answer/6295281)。
+>Google Play 自动在支持反混淆，可见[帮助中心](https://support.google.com/googleplay/android-developer/answer/6295281)。
 
 ## 限制
-使用__Proguard__的时候，需要注意一些技术问题，它们都很容易规避或者解决:
+使用 __Proguard__ 的时候，需要注意一些技术问题，它们都很容易规避或者解决：
 
-1. __Proguard__的优化算法会假设被处理的代码不会故意抛出NPE/ArrayIndexOutOfBoundsExceptions/OutOfMemoryErrors/StackOverflowErrors来达到某个目的。举个例子，如果`myObject.myMethod()`这样的方法调用完全无效，它可能会移除它，它忽略`myObject`是null的可能性（也即：忽略开发者通过这种方式抛出NPE错误的意图）。某些时候这是一件好事，优化后的代码会抛出更少的异常。但如果这个假设是错误的，开发者应该使用`-dontoptimize`关闭优化功能；
-2. __Proguard__的优化算法也会假设被处理的代码不会有`busy-waiting loops without at least testing on a volatile field`(翻译不好，大概是说通过一个无限循环去检测一个非volatile变量)，因此它也会移除此类代码。如果这项假设是错误的，开发者应该使用`-dontoptimize`关闭优化功能；
-3. 如果Input jars和Library jars在有class在同一个包下面，则混淆后的Output jars有可能会包含一些与Library jars同名的类文件，尤其当Library jars之前就被混淆过。因此Input jars和Library jars不应该共享一个包；
+1. __Proguard __的优化算法会假设被处理的代码不会故意抛出 NPE/ArrayIndexOutOfBoundsExceptions/OutOfMemoryErrors/StackOverflowErrors 来达到某个目的。举个例子，如果`myObject.myMethod()`这样的方法调用完全无效，它可能会移除它，它忽略`myObject`是null的可能性（也即：忽略开发者通过这种方式抛出 NPE 错误的意图）。某些时候这是一件好事，优化后的代码会抛出更少的异常。但如果这个假设是错误的，开发者应该使用`-dontoptimize`关闭优化功能；
+2. __Proguard__ 的优化算法也会假设被处理的代码不会有`busy-waiting loops without at least testing on a volatile field`（翻译不好，大概是说通过一个无限循环去检测一个非volatile变量），因此它也会移除此类代码。如果这项假设是错误的，开发者应该使用`-dontoptimize`关闭优化功能；
+3. 如果 Input jars 和 Library jars 在有 class 在同一个包下面，则混淆后的 Output jars 有可能会包含一些与 Library jars 同名的类文件，尤其当 Library jars 之前就被混淆过。因此 Input jars 和 Library jars 不应该共享一个包；
 
 ## 常见问题
 具体见[官网](http://proguard.sourceforge.net/FAQ.html)。这里整理几个重要的结论：
 
-1. __Proguard__会自动处理`Class.forName("SomeClass")`和`SomeClass.class`的处理情况，在压缩阶段，这些类会被保留，在混淆阶段，这些类也会被替换掉；
-2. 对于资源、String以及流程控制的混淆，直接看官网；
-3. __Proguard__支持增量式混淆——即提供一个之前的mapping文件进行一次新的混淆；
-4. __Proguard__允许自定义混淆字典；
+1. __Proguard __会自动处理`Class.forName("SomeClass")`和`SomeClass.class`的处理情况，在压缩阶段，这些类会被保留，在混淆阶段，这些类也会被替换掉；
+2. 对于资源、String 以及流程控制的混淆，直接看官网；
+3. __Proguard__ 支持增量式混淆——即提供一个之前的 mapping 文件进行一次新的混淆；
+4. __Proguard__ 允许自定义混淆字典；
