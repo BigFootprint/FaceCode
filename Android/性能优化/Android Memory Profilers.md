@@ -5,13 +5,13 @@ tags: [性能优化, 工具]
 categories: Android
 ---
 
-关于内存，Android提供了三个工具：
+关于内存，Android 提供了三个工具：
 
-1. Memory Monitor：可以找出是否有异常的GC操作导致性能问题； 
+1. Memory Monitor：可以找出是否有异常的 GC 操作导致性能问题； 
 2. Heap Viewer：可以找出被意外分配或者内存泄露的对象；
 3. Allocation Tracker：找出存在内存问题的代码；
 
-现在 Android Stuido 的 Android Monitor 面板已经集成了这三个工具，比起使用 Android Device Monitor 来更加方便快捷。如下图:<!--more-->
+现在 Android Stuido 的 Android Monitor 面板已经集成了这三个工具，比起使用 Android Device Monitor 来更加方便快捷。如下图：
 
 ![Android Monitor](../../images/Android-Monitor.png)
 
